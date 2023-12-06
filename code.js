@@ -11,10 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 figma.showUI(__html__);
 figma.ui.onmessage = (msg) => __awaiter(void 0, void 0, void 0, function* () {
     const local_vars = figma.variables.getLocalVariables();
-    const modeID = figma.variables.getLocalVariableCollections()[0].defaultModeId;
+    const local_collections = figma.variables.getLocalVariableCollections();
     let vars = [];
-    for (let local of local_vars) {
-        vars.push({ name: local.name, value: local.valuesByMode[modeID] });
+    for (let collection of local_collections) {
+        let modeID = collection.defaultModeId;
+        let collectionID = collection.id;
+        for (let local of local_vars) {
+            if (local.variableCollectionId == collectionID) {
+                vars.push({ name: local.name, value: local.valuesByMode[modeID] });
+            }
+        }
     }
     console.log(vars);
     figma.closePlugin();
